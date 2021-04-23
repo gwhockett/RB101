@@ -1,0 +1,34 @@
+en:
+    welcome: "Welcome to Calculator!"
+    1st: "Please enter the first number:"
+    2nd: "Please enter the second number:"
+    valid_num: "Please enter a valid number!"
+    operation: ["How would you like to put them together?",
+               "Enter '+' for addition",
+               "Enter '-' for subtraction",
+               "Enter '*' for multiplication",
+               "Enter '/' for division"]
+    valid_op: "Not a recognized operation. Please try again."
+es:
+    welcome: "¡Bienvenidos a la Calculadora!"
+    1st: "Por favor, introduzca el primer número:"
+    2nd: "Por favor, introduzca el segundo número:"
+    valid_num: "¡Por favor, introduzca un número válido!"
+    operation: ["¿Cómo te gustaría unirlos?",
+               "Introduzca '+' para la suma",
+               "Introduzca '-' para la resta",
+               "Introduzca '*' para multiplicar",
+               "Introduzca '/' para la división"]
+    valid_op: "No es una operación reconocida. Por favor, inténtelo de nuevo:"
+
+de:
+    welcome: "Willkommen beim Rechner!"
+    1st: "Bitte geben Sie die erste Zahl ein:"
+    2nd: "Bitte geben Sie die zweite Zahl ein:"
+    valid_num: "Bitte geben Sie eine gültige Nummer ein!"
+    operation: ["Wie möchten Sie sie zusammensetzen?",
+               "Geben Sie '+' für Addition ein",
+               "Geben Sie '-' für die Subtraktion ein",
+               "Geben Sie '*' für Multiplikation ein",
+               "Geben Sie '/' für die Division ein"]
+    valid_op: "Nicht erkannter Vorgang. Bitte versuchen Sie es erneut."
