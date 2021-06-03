@@ -1,0 +1,26 @@
+en:
+    welcome: "Welcome to Loan Calculator!"
+    amount: "Please enter the loan amount:"
+    year: "Please enter how many years the loan will be for:"
+    rate: "Please enter what percentage the yearly interest rate is:"
+    valid_num: "Please enter a valid number!"
+    valid_op: "Not a recognized operation. Please try again."
+    payments:
+      monthly: "monthly payments of $"
+      yearly: "Given a yearly interest rate of "
+      you: ", you would have " 
+es:
+    welcome: "¡Bienvenido a la Calculadora de Préstamos!"
+    amount: "Por favor, introduzca el importe del préstamo:"
+    year: "Por favor, introduzca el número de años que durará el préstamo:"
+    rate: "Por favor, introduzca el porcentaje del tipo de interés anual:"
+    valid_num: "¡Por favor, introduzca un número válido!"
+    valid_op: "No es una operación reconocida. Por favor, inténtelo de nuevo:"
+
+de:
+    welcome: "Willkommen bei Darlehen-Rechner!"
+    amount: "Bitte geben Sie den Darlehensbetrag ein:"
+    year: "Bitte geben Sie ein, für wie viele Jahre Sie den Darlehensbetrag haben möchten:"
+    rate: "Bitte geben Sie ein, wie viel Prozent der jährliche Zinssatz beträgt:"
+    valid_num: "Bitte geben Sie eine gültige Nummer ein!"
+    valid_op: "Nicht erkannter Vorgang. Bitte versuchen Sie es erneut."
