@@ -196,9 +196,8 @@ def score_five?(mtc_scr)
     true
   elsif mtc_scr[:computer] == 5
     true
-  else
-    nil
   end
+  nil
 end
 
 first_player = whos_first
@@ -229,9 +228,7 @@ loop do
 
   prompt "Play again?(y or n)"
   answer = gets.chomp
-  if answer == 'y'
-    first_player = whos_first
-  end
+  (first_player = whos_first) if answer == 'y'
   break unless answer.downcase.start_with?('y')
 end
 
