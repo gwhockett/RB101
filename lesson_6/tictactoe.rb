@@ -76,16 +76,6 @@ def square_strategy?(mkr, mks, q, r)
   mks.count(mkr) == q && mks.count(INITIAL_MARKER) == r
 end
 
-def winning_square!(brd)
-  WINNING_LINES.each do |line|
-    marks = brd.values_at(*line)
-    if square_strategy?(COMPUTER_MARKER, marks, 2, 1)
-      return brd[line[marks.index(INITIAL_MARKER)]] = COMPUTER_MARKER
-    end
-  end
-  defensive_square!(brd)
-end
-
 def defensive_square!(brd)
   WINNING_LINES.each do |line|
     marks = brd.values_at(*line)
@@ -118,7 +108,13 @@ def random_square!(brd)
 end
 
 def computer_places_piece!(brd)
-  winning_square!(brd)
+  WINNING_LINES.each do |line|
+    marks = brd.values_at(*line)
+    if square_strategy?(COMPUTER_MARKER, marks, 2, 1) # winning_square!
+      return brd[line[marks.index(INITIAL_MARKER)]] = COMPUTER_MARKER
+    end
+  end
+  defensive_square!(brd)
 end
 
 def board_full?(brd)
@@ -139,10 +135,6 @@ def detect_winner(brd)
   end
   nil
 end
-
-# def score_board
-#   { player: 0, :computer: 0 }
-# end
 
 def score_counter!(win, scr)
   if win == 'Player'
@@ -194,6 +186,21 @@ def place_piece!(brd, plyr)
   end
 end
 
+def match_winner(mtc_scr)
+  puts "Player won the match!" if mtc_scr[:player] == 5
+  puts "Computer won the match!" if mtc_scr[:computer] == 5
+end
+
+def score_five?(mtc_scr)
+  if mtc_scr[:player] == 5
+    true
+  elsif mtc_scr[:computer] == 5
+    true
+  else
+    nil
+  end
+end
+
 first_player = whos_first
 
 loop do
@@ -215,12 +222,9 @@ loop do
     gets.chomp
 
     score_counter!(detect_winner(board), match_score)
-    player_score = match_score[:player] == 5
-    computer_score = match_score[:computer] == 5
     display_board(board, match_score)
-    puts "Player won the match!" if player_score
-    puts "Computer won the match!" if computer_score
-    break if player_score || computer_score
+    match_winner(match_score)
+    break if score_five?(match_score)
   end
 
   prompt "Play again?(y or n)"
