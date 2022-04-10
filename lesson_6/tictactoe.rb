@@ -266,19 +266,15 @@ loop do
   loop do
     board = initialize_board
     game_play!(board, match_score, chosen_level, first_player)
-
     display_board(board, match_score, chosen_level)
-
     display_game_result(someone_won?(board), board)
     prompt "Press 'Enter' to continue."
     gets.chomp
-
     score_counter!(detect_winner(board), match_score)
     display_board(board, match_score, chosen_level)
     display_match_result(match_score)
     break if score_five?(match_score)
   end
-
   prompt "Play again?(y or n)"
   answer = gets.chomp
   (first_player = ask_whos_first) if answer == 'y'
