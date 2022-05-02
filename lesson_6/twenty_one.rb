@@ -1,20 +1,8 @@
 
 require "pry"
-def initiate_deck
-  suit = %w(H D S C)
-  cards = %w(2 3 4 5 6 7 8 9 10 J Q K A)
-  deck = []
-  cards.each do |num|
-    suit.map do |card|
-      arr = []
-      arr << card
-      deck << arr
-    end
-    deck.each do |type|
-      type << num if type.size < 2
-    end
-  end
-  deck
+
+def prompt(msg)
+  puts "=> #{msg}"
 end
 
 def display_cards()
@@ -26,33 +14,33 @@ def display_cards()
   puts "---#{dealt(card)}-|-#{dealt(card)}---"
 end
 
-def prompt(msg)
-  puts "=> #{msg}"
+def initiate_deck
+  suit = %w(Hearts Diamonds Spades Clubs)
+  cards = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
+  deck = []
+  suit.each do |num|
+    cards.map do |card|
+      arr = []
+      arr << card
+      deck << arr
+    end
+    deck.each do |type|
+      type << num if type.size < 2
+    end
+  end
+  deck
 end
 
-deck = initiate_deck.shuffle
-
-def not_ace_numeric_value(card)
+def not_ace_numeric_value(cards)
   value = 0
-  if card[1].to_i != 0
-    value += card[1].to_i
-  elsif card[1].to_i == 0 && card[1] != "A"
+  if cards[0].to_i != 0
+    value += cards[0].to_i
+  elsif cards[0].to_i == 0 && cards[0] != "Ace"
     value += 10
-  elsif card[1] == "A"
-    "A"
+  elsif cards[0] == "Ace"
+    "Ace"
   end
 end
-
-delt = []
-
-delt << not_ace_numeric_value(deck.pop)
-delt << not_ace_numeric_value(deck.pop)
-delt << not_ace_numeric_value(deck.pop)
-delt << not_ace_numeric_value(deck.pop)
-
-p delt
-
-total = 0
 
 def not_aces_total(cards)
   not_aces = []
@@ -62,20 +50,70 @@ def not_aces_total(cards)
   not_aces.sum
 end
 
-total += not_aces_total(delt)
-
 def aces_total(cards, current_total)
   aces_amount = 0
   cards.each do |card|
-    if current_total + 11 > 21 && card == "A"
+    if current_total + aces_amount + 11 > 21 && card == "Ace"
       aces_amount += 1
-    elsif card == "A"
+    elsif card == "Ace"
       aces_amount += 11
     end
   end
   aces_amount
 end
 
-p aces_total(delt, total)
-p total
-p total += aces_total(delt, total)
+def busted?(amount)
+  amount > 21 ? true : false
+end
+
+def deal!(cards, hand)
+  hand << cards.pop
+end
+
+deck = initiate_deck.shuffle
+
+player_hand = []
+dealer_hand = []
+
+2.times { |i| deal!(deck, player_hand); deal!(deck, dealer_hand) }
+
+puts "Player"
+
+player_hand_numeric = (player_hand.map do |card|
+  not_ace_numeric_value(card)
+end)
+
+p player_hand
+p player_hand_numeric
+
+loop do
+  prompt "Enter 'h' to hit."
+  prompt "Enter 's' to stay."
+  player_turn = gets.chomp
+  break if player_turn == 'h' || player_turn == 's'
+  prompt "That's not a valid entry."
+end
+
+player_total = 0
+
+player_total += not_aces_total(player_hand_numeric)
+player_total += aces_total(player_hand_numeric, player_total)
+
+p player_total
+prompt "Player busted!" if busted?(player_total)
+
+puts "Dealer"
+
+dealer_hand_numeric = (dealer_hand.map do |card|
+  not_ace_numeric_value(card)
+end)
+
+p dealer_hand
+p dealer_hand_numeric
+
+dealer_total = 0
+
+dealer_total += not_aces_total(dealer_hand_numeric)
+dealer_total += aces_total(dealer_hand_numeric, dealer_total)
+
+p dealer_total
