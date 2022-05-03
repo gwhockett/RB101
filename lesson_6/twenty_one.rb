@@ -62,6 +62,19 @@ def aces_total(cards, current_total)
   aces_amount
 end
 
+def hit_stay
+  player_turn = ''
+  loop do
+    prompt "Enter 'h' to hit."
+    prompt "Enter 's' to stay."
+    player_turn = gets.chomp
+    break if player_turn == 's' || player_turn == 'h'
+    prompt "That's not a valid entry." if player_turn != 's' && 
+                                          player_turn != 'h'
+  end
+  player_turn    
+end
+
 def busted?(amount)
   amount > 21 ? true : false
 end
@@ -92,12 +105,10 @@ loop do
   puts "Player has #{player_total}"
   prompt "Player busted!" if busted?(player_total)
   break if busted?(player_total)
-  prompt "Enter 'h' to hit."
-  prompt "Enter 's' to stay."
-  player_turn = gets.chomp
-  deal!(deck, player_hand) if player_turn == 'h'
-  break if player_turn == 's'
-  prompt "That's not a valid entry." if player_turn != 's' && player_turn != 'h'
+  break if player_total == 21
+  player_move = hit_stay
+  deal!(deck, player_hand) if player_move == 'h'
+  break if player_move == 's'
 end
 
 puts "Dealer"
