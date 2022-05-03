@@ -1,6 +1,3 @@
-
-require "pry"
-
 def prompt(msg)
   puts "=> #{msg}"
 end
@@ -34,9 +31,9 @@ end
 def not_ace_numeric_value(cards)
   value = 0
   if cards[0].to_i != 0
-    value += cards[0].to_i
+    value = cards[0].to_i
   elsif cards[0].to_i == 0 && cards[0] != "Ace"
-    value += 10
+    value = 10
   elsif cards[0] == "Ace"
     "Ace"
   end
@@ -62,7 +59,18 @@ def aces_total(cards, current_total)
   aces_amount
 end
 
-def hit_stay
+def dealer_initial_hand_showing(cards)
+  value = 0
+  if cards[0][0].to_i != 0
+    value = cards[0][0].to_i
+  elsif cards[0][0].to_i == 0 && cards[0][0] != "Ace"
+    value = 10
+  elsif cards[0][0] == "Ace"
+    value = 11
+  end
+end
+
+def player_hit_stay
   player_turn = ''
   loop do
     prompt "Enter 'h' to hit."
@@ -98,31 +106,31 @@ loop do
   p player_hand
   player_total = 0
   player_hand_numeric = (player_hand.map do |card|
-    not_ace_numeric_value(card)
-  end)
+                         not_ace_numeric_value(card)
+                         end)
   player_total += not_aces_total(player_hand_numeric)
   player_total += aces_total(player_hand_numeric, player_total)
   puts "Player has #{player_total}"
   prompt "Player busted!" if busted?(player_total)
-  break if busted?(player_total)
-  break if player_total == 21
-  player_move = hit_stay
+  break if busted?(player_total) || player_total == 21
+  player_move = player_hit_stay
   deal!(deck, player_hand) if player_move == 'h'
   break if player_move == 's'
 end
 
 puts "Dealer"
-
-dealer_hand_numeric = (dealer_hand.map do |card|
-  not_ace_numeric_value(card)
-end)
-
-p dealer_hand
-p dealer_hand_numeric
-
-dealer_total = 0
-
-dealer_total += not_aces_total(dealer_hand_numeric)
-dealer_total += aces_total(dealer_hand_numeric, dealer_total)
-
-p dealer_total
+# p dealer_hand_numeric
+loop do
+  p dealer_hand
+  puts "Dealer is showing #{dealer_initial_hand_showing(dealer_hand)}"
+  dealer_total = 0
+  dealer_hand_numeric = (dealer_hand.map do |card|
+                         not_ace_numeric_value(card)
+                         end)
+  dealer_total += not_aces_total(dealer_hand_numeric)
+  dealer_total += aces_total(dealer_hand_numeric, dealer_total)
+  puts "Dealer has #{dealer_total}"
+  prompt "Dealer busted!" if busted?(dealer_total)
+  break if busted?(dealer_total) || dealer_total == 21
+  deal!(deck, dealer_hand) if dealer_total < 17
+end
