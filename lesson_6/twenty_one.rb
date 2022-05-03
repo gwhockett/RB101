@@ -79,28 +79,26 @@ dealer_hand = []
 
 puts "Player"
 
-player_hand_numeric = (player_hand.map do |card|
-  not_ace_numeric_value(card)
-end)
-
-p player_hand
-p player_hand_numeric
+# p player_hand_numeric
 
 loop do
+  p player_hand
+  player_total = 0
+  player_hand_numeric = (player_hand.map do |card|
+    not_ace_numeric_value(card)
+  end)
+  player_total += not_aces_total(player_hand_numeric)
+  player_total += aces_total(player_hand_numeric, player_total)
+  puts "Player has #{player_total}"
+  prompt "Player busted!" if busted?(player_total)
+  break if busted?(player_total)
   prompt "Enter 'h' to hit."
   prompt "Enter 's' to stay."
   player_turn = gets.chomp
-  break if player_turn == 'h' || player_turn == 's'
-  prompt "That's not a valid entry."
+  deal!(deck, player_hand) if player_turn == 'h'
+  break if player_turn == 's'
+  prompt "That's not a valid entry." if player_turn != 's' && player_turn != 'h'
 end
-
-player_total = 0
-
-player_total += not_aces_total(player_hand_numeric)
-player_total += aces_total(player_hand_numeric, player_total)
-
-p player_total
-prompt "Player busted!" if busted?(player_total)
 
 puts "Dealer"
 
