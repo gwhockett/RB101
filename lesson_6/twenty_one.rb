@@ -1,16 +1,3 @@
-def prompt(msg)
-  puts "=> #{msg}"
-end
-
-
-def display_dealer_cards(dealer)
-  if dealer.size < 3
-    dealer[0]
-  else
-    dealer
-  end
-end
-
 def initiate_deck
   suit = %w(Hearts Diamonds Spades Clubs)
   cards = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
@@ -68,7 +55,19 @@ def hand_value_total(hand)
   total += aces_total(hand_numeric, total)
 end
 
-def dealer_initial_hand_showing(cards)
+def prompt(msg)
+  puts "=> #{msg}"
+end
+
+def display_initial_dealer_hand(dealer)
+  if dealer.size < 3
+    dealer[0]
+  else
+    dealer
+  end
+end
+
+def dealer_initial_showing_amount(cards)
   value = 0
   if cards[0][0].to_i != 0
     value = cards[0][0].to_i
@@ -106,26 +105,25 @@ player_hand = []
 dealer_hand = []
 
 2.times { |_| deal!(deck, player_hand); deal!(deck, dealer_hand) }
-
-puts "Player"
-
 # p player_hand_numeric
 
-def game_output(player, dealer, player_amount, dealer_amount)
-  system clear
-  p display_dealer_cards(dealer)
-  puts "Dealer is showing #{dealer_initial_hand_showing(dealer)}" if dealer.size < 3
-  p player
-  puts <<~ GAME
-
-  
+def player_turn_output(player_cards, dealer_cards, player_amount, dealer_amount)
+  system 'clear'
+  puts "Dealer hand [#{display_initial_dealer_hand(dealer_cards)}, [****, ****]]"
+  display_initial_dealer_hand(dealer_cards)
+  if dealer_cards.size < 3
+    puts "Dealer is showing #{dealer_initial_showing_amount(dealer_cards)}"
+  else
+    puts dealer_amount
+  end
+  puts "Player hand #{player_cards}"
+  puts "Player amount #{player_amount}"
+end
 
 loop do
-  p player_hand
-  p display_dealer_cards(dealer_hand)
-  puts "Dealer is showing #{dealer_initial_hand_showing(dealer_hand)}"
   player_total = hand_value_total(player_hand)
-  puts "Player has #{player_total}"
+  dealer_total = hand_value_total(dealer_hand)
+  player_turn_output(player_hand, dealer_hand, player_total, dealer_total)
   prompt "Player busted!" if busted?(player_total)
   break if busted?(player_total) || player_total == 21
   player_move = player_hit_stay
@@ -136,8 +134,8 @@ end
 puts "Dealer"
 # p dealer_hand_numeric
 loop do
-  p display_dealer_cards(dealer_hand)
-  puts "Dealer is showing #{dealer_initial_hand_showing(dealer_hand)}"
+  p display_initial_dealer_hand(dealer_hand)
+  puts "Dealer is showing #{dealer_initial_showing_amount(dealer_hand)}"
   dealer_total = hand_value_total(dealer_hand)
   puts "Dealer has #{dealer_total}"
   prompt "Dealer busted!" if busted?(dealer_total)
