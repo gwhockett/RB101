@@ -60,11 +60,7 @@ def prompt(msg)
 end
 
 def display_initial_dealer_hand(dealer)
-  if dealer.size < 3
-    dealer[0]
-  else
-    dealer
-  end
+  dealer[0] if dealer.size < 3
 end
 
 def dealer_initial_showing_amount(cards)
@@ -99,14 +95,6 @@ def deal!(cards, hand)
   hand << cards.pop
 end
 
-deck = initiate_deck.shuffle
-
-player_hand = []
-dealer_hand = []
-
-2.times { |_| deal!(deck, player_hand); deal!(deck, dealer_hand) }
-# p player_hand_numeric
-
 def player_turn_output(player_cards, dealer_cards, player_amount, dealer_amount)
   system 'clear'
   puts "Dealer hand [#{display_initial_dealer_hand(dealer_cards)}, [****, ****]]"
@@ -116,9 +104,27 @@ def player_turn_output(player_cards, dealer_cards, player_amount, dealer_amount)
   else
     puts dealer_amount
   end
+  puts ''
   puts "Player hand #{player_cards}"
   puts "Player amount #{player_amount}"
+  puts ''
 end
+
+def dealer_turn_output(player_cards, dealer_cards, player_amount, dealer_amount)
+  system 'clear'
+  puts "Player hand #{player_cards}"
+  puts "Player amount #{player_amount}"
+  puts ''
+  puts "Dealer hand #{dealer_cards}"
+  puts "Dealer amount #{dealer_amount}"
+end
+
+deck = initiate_deck.shuffle
+
+player_hand = []
+dealer_hand = []
+
+2.times { |_| deal!(deck, player_hand); deal!(deck, dealer_hand) }
 
 loop do
   player_total = hand_value_total(player_hand)
@@ -131,14 +137,15 @@ loop do
   break if player_move == 's'
 end
 
-puts "Dealer"
-# p dealer_hand_numeric
-loop do
-  p display_initial_dealer_hand(dealer_hand)
-  puts "Dealer is showing #{dealer_initial_showing_amount(dealer_hand)}"
-  dealer_total = hand_value_total(dealer_hand)
-  puts "Dealer has #{dealer_total}"
-  prompt "Dealer busted!" if busted?(dealer_total)
-  break if busted?(dealer_total) || (17..21).include?(dealer_total)
-  deal!(deck, dealer_hand) if dealer_total < 17
+if busted?(hand_value_total(player_hand))
+  prompt "Player busted! Dealer wins!"
+else
+  loop do
+    player_total = hand_value_total(player_hand)
+    dealer_total = hand_value_total(dealer_hand)
+    dealer_turn_output(player_hand, dealer_hand, player_total, dealer_total)
+    prompt "Dealer busted!" if busted?(dealer_total)
+    break if busted?(dealer_total) || (17..21).include?(dealer_total)
+    deal!(deck, dealer_hand) if dealer_total < 17
+  end
 end
