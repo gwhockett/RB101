@@ -1,3 +1,5 @@
+require 'pry'
+
 def initiate_deck
   suit = %w(Hearts Diamonds Spades Clubs)
   cards = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
@@ -91,61 +93,79 @@ def busted?(amount)
   amount > 21 ? true : false
 end
 
+def player_turn_result(player_cards)
+  player_score = hand_value_total(player_cards)
+  if player_score == 21
+    return 'stayed'
+  elsif player_score > 21
+    return 'Player busted!'
+  end
+  nil
+end
+
+def dealer_turn_result(dealer_cards)
+  dealer_score = hand_value_total(dealer_cards)
+  if (17..21).include?(dealer_score)
+    return 'stayed'
+  elsif dealer_score > 21
+    return 'Dealer busted!'
+  end
+  nil
+end
+
 def deal!(cards, hand)
   hand << cards.pop
 end
 
-def player_turn_output(player_cards, dealer_cards, player_amount, dealer_amount)
+def player_turn_output(player_cards, dealer_cards)
   system 'clear'
+  player_score = hand_value_total(player_cards)
+  dealer_score = hand_value_total(dealer_cards)
   puts "Dealer hand [#{display_initial_dealer_hand(dealer_cards)}, [****, ****]]"
   display_initial_dealer_hand(dealer_cards)
   if dealer_cards.size < 3
     puts "Dealer is showing #{dealer_initial_showing_amount(dealer_cards)}"
   else
-    puts dealer_amount
+    puts dealer_score
   end
   puts ''
   puts "Player hand #{player_cards}"
-  puts "Player amount #{player_amount}"
+  puts "Player has #{player_score}"
   puts ''
 end
 
-def dealer_turn_output(player_cards, dealer_cards, player_amount, dealer_amount)
+def dealer_turn_output(player_cards, dealer_cards)
   system 'clear'
-  puts "Player hand #{player_cards}"
-  puts "Player amount #{player_amount}"
-  puts ''
+  player_score = hand_value_total(player_cards)
+  dealer_score = hand_value_total(dealer_cards)
   puts "Dealer hand #{dealer_cards}"
-  puts "Dealer amount #{dealer_amount}"
+  puts "Dealer has #{dealer_score}"
+  puts ''
+  puts "Player hand #{player_cards}"
+  puts "Player has #{player_score}"
 end
 
-deck = initiate_deck.shuffle
+  deck = initiate_deck.shuffle
 
-player_hand = []
-dealer_hand = []
+  player_hand = []
+  dealer_hand = []
 
-2.times { |_| deal!(deck, player_hand); deal!(deck, dealer_hand) }
+  2.times { |_| deal!(deck, player_hand); deal!(deck, dealer_hand) }
 
-loop do
-  player_total = hand_value_total(player_hand)
-  dealer_total = hand_value_total(dealer_hand)
-  player_turn_output(player_hand, dealer_hand, player_total, dealer_total)
-  prompt "Player busted!" if busted?(player_total)
-  break if busted?(player_total) || player_total == 21
-  player_move = player_hit_stay
-  deal!(deck, player_hand) if player_move == 'h'
-  break if player_move == 's'
-end
-
-if busted?(hand_value_total(player_hand))
-  prompt "Player busted! Dealer wins!"
-else
   loop do
-    player_total = hand_value_total(player_hand)
-    dealer_total = hand_value_total(dealer_hand)
-    dealer_turn_output(player_hand, dealer_hand, player_total, dealer_total)
-    prompt "Dealer busted!" if busted?(dealer_total)
-    break if busted?(dealer_total) || (17..21).include?(dealer_total)
-    deal!(deck, dealer_hand) if dealer_total < 17
+    # binding.pry
+    player_turn_output(player_hand, dealer_hand)
+    break if !!player_turn_result(player_hand)
+    player_move = player_hit_stay
+    break if player_move == 's'
+    deal!(deck, player_hand) if player_move == 'h'
   end
-end
+  if busted?(hand_value_total(player_hand))
+    prompt "Player busted! Dealer wins!"
+  else
+    loop do
+      dealer_turn_output(player_hand, dealer_hand)
+      break if dealer_turn_result(dealer_hand)
+      deal!(deck, dealer_hand)
+    end
+  end
