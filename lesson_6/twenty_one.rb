@@ -1,5 +1,3 @@
-require 'pry'
-
 def initiate_deck
   suit = %w(Hearts Diamonds Spades Clubs)
   cards = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
@@ -17,12 +15,13 @@ def initiate_deck
   deck
 end
 
+# hand value logic start
+
 def not_ace_numeric_value(cards)
-  value = 0
   if cards[0].to_i != 0
-    value = cards[0].to_i
+    cards[0].to_i
   elsif cards[0].to_i == 0 && cards[0] != "Ace"
-    value = 10
+    10
   elsif cards[0] == "Ace"
     "Ace"
   end
@@ -51,30 +50,27 @@ end
 def hand_value_total(hand)
   total = 0
   hand_numeric = (hand.map do |card|
-                  not_ace_numeric_value(card)
+                    not_ace_numeric_value(card)
                   end)
   total += not_aces_total(hand_numeric)
   total += aces_total(hand_numeric, total)
+  total
 end
 
-def prompt(msg)
-  puts "=> #{msg}"
-end
-
-def display_initial_dealer_hand(dealer)
-  dealer[0] if dealer.size < 3
-end
-
-def dealer_initial_showing_amount(cards)
-  value = 0
-  if cards[0][0].to_i != 0
-    value = cards[0][0].to_i
-  elsif cards[0][0].to_i == 0 && cards[0][0] != "Ace"
-    value = 10
-  elsif cards[0][0] == "Ace"
-    value = 11
+def dealer_first_card_amount(dealer_cards)
+  first_card = dealer_cards[0][0]
+  if first_card.to_i != 0
+    first_card.to_i
+  elsif first_card.to_i == 0 && first_card != "Ace"
+    10
+  elsif first_card == "Ace"
+    11
   end
 end
+
+# hand value logic end
+
+# game play logic start
 
 def player_hit_stay
   player_turn = ''
@@ -83,14 +79,10 @@ def player_hit_stay
     prompt "Enter 's' to stay."
     player_turn = gets.chomp
     break if player_turn == 's' || player_turn == 'h'
-    prompt "That's not a valid entry." if player_turn != 's' && 
+    prompt "That's not a valid entry." if player_turn != 's' &&
                                           player_turn != 'h'
   end
-  player_turn    
-end
-
-def busted?(amount)
-  amount > 21 ? true : false
+  player_turn
 end
 
 def player_turn_result(player_cards)
@@ -117,20 +109,21 @@ def deal!(cards, hand)
   hand << cards.pop
 end
 
+# game play logic end
+
+# game display logic start
+
+def prompt(msg)
+  puts "=> #{msg}"
+end
+
 def player_turn_output(player_cards, dealer_cards)
   system 'clear'
   player_score = hand_value_total(player_cards)
-  dealer_score = hand_value_total(dealer_cards)
-  puts "Dealer hand [#{display_initial_dealer_hand(dealer_cards)}, [****, ****]]"
-  display_initial_dealer_hand(dealer_cards)
-  if dealer_cards.size < 3
-    puts "Dealer is showing #{dealer_initial_showing_amount(dealer_cards)}"
-  else
-    puts dealer_score
-  end
+  puts "Dealer hand [#{dealer_cards[0]}, [***, *****]]"
+  puts "Dealer is showing #{dealer_first_card_amount(dealer_cards)}"
   puts ''
-  puts "Player hand #{player_cards}"
-  puts "Player has #{player_score}"
+  puts "Player hand #{player_cards}", "Player has #{player_score}"
   puts ''
 end
 
@@ -138,34 +131,37 @@ def dealer_turn_output(player_cards, dealer_cards)
   system 'clear'
   player_score = hand_value_total(player_cards)
   dealer_score = hand_value_total(dealer_cards)
-  puts "Dealer hand #{dealer_cards}"
-  puts "Dealer has #{dealer_score}"
+  puts "Dealer hand #{dealer_cards}", "Dealer has #{dealer_score}"
   puts ''
-  puts "Player hand #{player_cards}"
-  puts "Player has #{player_score}"
+  puts "Player hand #{player_cards}", "Player has #{player_score}"
+  puts ''
 end
 
-  deck = initiate_deck.shuffle
+# game display logic end
 
-  player_hand = []
-  dealer_hand = []
+deck = initiate_deck.shuffle
 
-  2.times { |_| deal!(deck, player_hand); deal!(deck, dealer_hand) }
+player_hand = []
+dealer_hand = []
 
+2.times do |_|
+  deal!(deck, player_hand)
+  deal!(deck, dealer_hand)
+end
+
+loop do
+  player_turn_output(player_hand, dealer_hand)
+  break if !!player_turn_result(player_hand)
+  player_move = player_hit_stay
+  break if player_move == 's'
+  deal!(deck, player_hand) if player_move == 'h'
+end
+if player_turn_result(player_hand) == 'Player busted!'
+  prompt "Player busted! Dealer wins!"
+else
   loop do
-    # binding.pry
-    player_turn_output(player_hand, dealer_hand)
-    break if !!player_turn_result(player_hand)
-    player_move = player_hit_stay
-    break if player_move == 's'
-    deal!(deck, player_hand) if player_move == 'h'
+    dealer_turn_output(player_hand, dealer_hand)
+    break if dealer_turn_result(dealer_hand)
+    deal!(deck, dealer_hand)
   end
-  if busted?(hand_value_total(player_hand))
-    prompt "Player busted! Dealer wins!"
-  else
-    loop do
-      dealer_turn_output(player_hand, dealer_hand)
-      break if dealer_turn_result(dealer_hand)
-      deal!(deck, dealer_hand)
-    end
-  end
+end
