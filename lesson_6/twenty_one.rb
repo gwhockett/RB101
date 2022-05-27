@@ -1,5 +1,3 @@
-require 'pry'
-
 def initiate_deck
   suit = %w(Hearts Diamonds Spades Clubs)
   cards = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
@@ -86,39 +84,40 @@ def player_hit_stay!(player_choice)
   end
 end
 
-def player_turn_result(player_cards, dealer_cards, player_choice)
+def player_turn_result(player_cards, player_choice)
   player_score = hand_value_total(player_cards)
-  dealer_score = hand_value_total(dealer_cards)
   if player_score == 21
-    return 'stay'
+    'stay'
   elsif player_choice[0] == 's'
-    return 'stay'
-  elsif player_score > 21 && dealer_score < 22
-    return 'Dealer'
+    'stay'
+  elsif player_score > 21
+    'bust'
   end
-  nil
 end
 
-def dealer_turn_result(player_cards, dealer_cards)
-  dealer_score = hand_value_total(dealer_cards)
-  player_score = hand_value_total(player_cards)
-  if (17..21).include?(dealer_score)
-    return 'stay'
-  elsif dealer_score > 21 && player_score < 22
-    return 'Player'
+def dealer_turn_result(dealer_cards)
+  score = hand_value_total(dealer_cards)
+  if (17..21).include?(score)
+    'stay'
+  elsif score > 21
+    'bust'
   end
-  nil
 end
 
-def game_result(player_cards, dealer_cards, player_choice)
+def game_result_output(dealer_cards, player_cards, player_choice)
   dealer_score = hand_value_total(dealer_cards)
   player_score = hand_value_total(player_cards)
-  if player_turn_result(player_cards, dealer_cards, player_choice) == 'Dealer'
-    'Dealer'
-  elsif dealer_turn_result(player_cards, dealer_cards) == 'Player'
-    'Player'
+
+  if player_turn_result(player_cards, player_choice) == 'bust'
+    'Player busted, Dealer wins!'
+  elsif dealer_turn_result(dealer_cards) == 'bust'
+    'Dealer busted, Player wins!'
+  elsif player_score > dealer_score
+    'Player wins!'
+  elsif dealer_score > player_score
+    'Dealer wins!'
   elsif dealer_score == player_score
-    'Tie'
+    'Push, tie game.'
   end
 end
 
@@ -129,29 +128,54 @@ end
 # game play logic end
 
 # game display logic start
-
 def prompt(msg)
   puts "=> #{msg}"
+end
+
+def intro_info
+  system 'clear'
+  puts '==================================================='
+  puts 'Welcome to 21! Like classic Blackjack...'
+  puts 'Don\'t go over 21 or you bust and the Dealer wins!'
+  puts 'If you and the Dealer don\'t bust out'
+  puts 'then the hand with the highest score wins.'
+  puts 'Hit to get another card for your hand.'
+  puts 'Stay to keep your score.'
+  puts '===================================================', ''
+  prompt 'Press \'Enter\' to start the game.'
+  gets.chomp
 end
 
 def player_turn_output(player_cards, dealer_cards)
   system 'clear'
   player_score = hand_value_total(player_cards)
-  puts "Dealer hand [#{dealer_cards[0]}, [***, *****]]"
+  puts "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=", ''
+  puts "Dealer's hand [#{dealer_cards[0]}, [***, *****]]"
   puts "Dealer is showing #{dealer_first_card_amount(dealer_cards)}", ''
-  puts "Player hand #{player_cards}", "Player has #{player_score}", ''
+  puts "Player's hand #{player_cards}", "Player has #{player_score}", ''
+  puts "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=", ''
 end
 
 def dealer_turn_output(player_cards, dealer_cards)
   system 'clear'
   player_score = hand_value_total(player_cards)
   dealer_score = hand_value_total(dealer_cards)
-  puts "Dealer hand #{dealer_cards}", "Dealer has #{dealer_score}", ''
-  puts "Player hand #{player_cards}", "Player has #{player_score}", ''
+  puts "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*", ''
+  puts "Dealer's hand #{dealer_cards}", "Dealer has #{dealer_score}", ''
+  puts "Player's hand #{player_cards}", "Player has #{player_score}", ''
+  puts "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*", ''
+end
+
+def play_again?
+  puts "---------------------------------------------------"
+  prompt "Do you want to play again? (y or n)"
+  answer = gets.chomp
+  answer.downcase.start_with?('y')
 end
 
 # game display logic end
 loop do
+  intro_info
   player_hand = []
   dealer_hand = []
   player_move = []
@@ -162,16 +186,17 @@ loop do
   end
   loop do
     player_turn_output(player_hand, dealer_hand)
-    break if !!player_turn_result(player_hand, dealer_hand, player_move)
+    break if !!player_turn_result(player_hand, player_move)
     player_hit_stay!(player_move)
     deal!(deck, player_hand) if player_move[0] == 'h'
   end
-  p player_move
-  break if player_turn_result(player_hand, dealer_hand, player_move) == 'Dealer'
-  loop do
-    dealer_turn_output(player_hand, dealer_hand)
-    break if !!dealer_turn_result(player_hand, dealer_hand)
-    deal!(deck, dealer_hand)
+  if player_turn_result(player_hand, player_move) == 'stay'
+    loop do
+      dealer_turn_output(player_hand, dealer_hand)
+      break if !!dealer_turn_result(dealer_hand)
+      deal!(deck, dealer_hand)
+    end
   end
-  break
+  prompt game_result_output(dealer_hand, player_hand, player_move)
+  break unless play_again?
 end
