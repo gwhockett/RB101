@@ -104,23 +104,6 @@ def dealer_turn_result(dealer_cards)
   end
 end
 
-def game_result_output(dealer_cards, player_cards, player_choice)
-  dealer_score = hand_value_total(dealer_cards)
-  player_score = hand_value_total(player_cards)
-
-  if player_turn_result(player_cards, player_choice) == 'bust'
-    'Player busted, Dealer wins!'
-  elsif dealer_turn_result(dealer_cards) == 'bust'
-    'Dealer busted, Player wins!'
-  elsif player_score > dealer_score
-    'Player wins!'
-  elsif dealer_score > player_score
-    'Dealer wins!'
-  elsif dealer_score == player_score
-    'Push, tie game.'
-  end
-end
-
 def deal!(cards, hand)
   hand << cards.pop
 end
@@ -128,19 +111,20 @@ end
 # game play logic end
 
 # game display logic start
+
 def prompt(msg)
   puts "=> #{msg}"
 end
 
 def intro_info
   system 'clear'
-  puts '==================================================='
+  puts '===================================================', ''
   puts 'Welcome to 21! Like classic Blackjack...'
   puts 'Don\'t go over 21 or you bust and the Dealer wins!'
   puts 'If you and the Dealer don\'t bust out'
   puts 'then the hand with the highest score wins.'
   puts 'Hit to get another card for your hand.'
-  puts 'Stay to keep your score.'
+  puts 'Stay to keep your score.', ''
   puts '===================================================', ''
   prompt 'Press \'Enter\' to start the game.'
   gets.chomp
@@ -166,14 +150,35 @@ def dealer_turn_output(player_cards, dealer_cards)
   puts "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*", ''
 end
 
+def game_result_output(dealer_cards, player_cards, player_choice)
+  dealer_score = hand_value_total(dealer_cards)
+  player_score = hand_value_total(player_cards)
+
+  if player_turn_result(player_cards, player_choice) == 'bust'
+    'Player busted, Dealer wins!'
+  elsif dealer_turn_result(dealer_cards) == 'bust'
+    'Dealer busted, Player wins!'
+  elsif player_score > dealer_score
+    'Player wins!'
+  elsif dealer_score > player_score
+    'Dealer wins!'
+  elsif dealer_score == player_score
+    'Push, tie game.'
+  end
+end
+
 def play_again?
-  puts "---------------------------------------------------"
-  prompt "Do you want to play again? (y or n)"
+  puts ''
+  puts "---------------------------------------------------", ''
+  prompt "Play again? (y or n)"
   answer = gets.chomp
   answer.downcase.start_with?('y')
 end
 
 # game display logic end
+
+# game loop
+
 loop do
   intro_info
   player_hand = []
