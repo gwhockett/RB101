@@ -2,14 +2,11 @@ def initiate_deck
   suit = %w(Hearts Diamonds Spades Clubs)
   cards = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
   deck = []
-  suit.each do |num|
-    cards.map do |card|
-      arr = []
-      arr << card
-      deck << arr
-    end
-    deck.each do |type|
-      type << num if type.size < 2
+  suit.each do |type|
+    cards.each do |card|
+      hash = {}
+      hash[card] = type
+      deck << hash
     end
   end
   deck
@@ -18,11 +15,12 @@ end
 # hand value logic start
 
 def not_ace_numeric_value(cards)
-  if cards[0].to_i != 0
-    cards[0].to_i
-  elsif cards[0].to_i == 0 && cards[0] != "Ace"
+  card = cards.keys
+  if card[0].to_i != 0
+    card[0].to_i
+  elsif card[0].to_i == 0 && !cards.key?("Ace")
     10
-  elsif cards[0] == "Ace"
+  elsif cards.key?("Ace")
     "Ace"
   end
 end
@@ -58,7 +56,7 @@ def hand_value_total(hand)
 end
 
 def dealer_first_card_amount(dealer_cards)
-  first_card = dealer_cards[0][0]
+  first_card = dealer_cards.first.keys[0]
   if first_card.to_i != 0
     first_card.to_i
   elsif first_card.to_i == 0 && first_card != "Ace"
@@ -212,13 +210,15 @@ loop do
     sleep(2)
     loop do
       dealer_turn_output(player_hand, dealer_hand)
-      break if !!dealer_turn_result(dealer_hand)
+      if dealer_turn_result(dealer_hand) == 'stay'
+        prompt "Dealer stayed with a score of #{hand_value_total(dealer_hand)}."
+        break
+      elsif dealer_turn_result(dealer_hand) == 'bust'
+        break
+      end
       deal!(deck, dealer_hand)
       dealing_cards
     end
-  end
-  if dealer_turn_result(dealer_hand) == 'stay'
-    prompt "Dealer stayed with a score of #{hand_value_total(dealer_hand)}."
   end
   sleep(2)
   prompt game_result_output(dealer_hand, player_hand, player_move)
