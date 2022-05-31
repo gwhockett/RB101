@@ -116,19 +116,31 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
-def intro_info
-  system 'clear'
-  puts '===================================================', ''
-  puts 'Welcome to 21! Like classic Blackjack...'
-  puts 'Don\'t go over 21 or you bust and the Dealer wins!'
-  puts 'If you and the Dealer don\'t bust out'
-  puts 'then the hand with the highest score wins.'
-  puts 'Hit to get another card for your hand.'
-  puts 'Stay to keep your score.', ''
-  puts '===================================================', ''
-  prompt 'Press \'Enter\' to start the game.'
-  gets.chomp
+def intro_or_next_game(play_more)
+  if play_more == true
+    return
+  else
+    system 'clear'
+    puts '===================================================', ''
+    puts 'Welcome to 21! Like classic Blackjack...'
+    puts 'Don\'t go over 21 or you bust and the Dealer wins!'
+    puts 'If you and the Dealer don\'t bust out'
+    puts 'then the hand with the highest score wins.'
+    puts 'Hit to get another card for your hand.'
+    puts 'Stay to keep your score.', ''
+    puts '===================================================', ''
+    prompt 'Press \'Enter\' to start the game.'
+    gets.chomp
+  end
 end
+
+def play_again?
+  puts ''
+  puts "---------------------------------------------------", ''
+  prompt "Play again? (y or n)"
+  answer = gets.chomp
+  answer.downcase.start_with?('y')
+end 
 
 def player_turn_output(player_cards, dealer_cards)
   system 'clear'
@@ -167,20 +179,17 @@ def game_result_output(dealer_cards, player_cards, player_choice)
   end
 end
 
-def play_again?
-  puts ''
-  puts "---------------------------------------------------", ''
-  prompt "Play again? (y or n)"
-  answer = gets.chomp
-  answer.downcase.start_with?('y')
+def dealing_cards
+  prompt "Dealing cards..."
+  sleep(2)
 end
 
 # game display logic end
 
 # game loop
-
+next_game = nil
 loop do
-  intro_info
+  intro_or_next_game(next_game)
   player_hand = []
   dealer_hand = []
   player_move = []
@@ -189,19 +198,29 @@ loop do
     deal!(deck, player_hand)
     deal!(deck, dealer_hand)
   end
+  dealing_cards
   loop do
     player_turn_output(player_hand, dealer_hand)
     break if !!player_turn_result(player_hand, player_move)
     player_hit_stay!(player_move)
     deal!(deck, player_hand) if player_move[0] == 'h'
+    dealing_cards if player_move[0] == 'h'
   end
   if player_turn_result(player_hand, player_move) == 'stay'
+    prompt "Player stayed with a score of #{hand_value_total(player_hand)}."
+    prompt "Dealer's turn..."
+    sleep(2)
     loop do
       dealer_turn_output(player_hand, dealer_hand)
       break if !!dealer_turn_result(dealer_hand)
       deal!(deck, dealer_hand)
+      dealing_cards
     end
   end
+  if dealer_turn_result(dealer_hand) == 'stay'
+    prompt "Dealer stayed with a score of #{hand_value_total(dealer_hand)}."
+  end
+  sleep(2)
   prompt game_result_output(dealer_hand, player_hand, player_move)
-  break unless play_again?
+  break unless next_game = play_again?
 end
