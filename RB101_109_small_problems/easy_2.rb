@@ -52,4 +52,96 @@ total_formatted = sprintf("%.2f",bill + tip)
 
 puts "The tip is $#{tip_formatted}"
 puts "The total is $#{total_formatted}"
+
+ex. 4 When will I retire?
+
+print "What is your age? "
+age = gets.chomp.to_i
+
+print "What age would you like to retire? "
+retirement_age = gets.chomp.to_i
+
+retirement_gap = retirement_age - age
+
+puts "Its #{Time.now.year}. You will retire in #{retirement_gap + Time.now.year}."
+puts "You only have #{retirement_gap} years to go!"
+
+ex. 5 Gretting a user
+
+print "What is your name? "
+
+name = gets.chomp
+
+if name.end_with?("!")
+  puts "HELLO #{name.upcase.chop}. WHY ARE WE SCREAMING?"
+else
+  puts "Hello #{name}."
+end
+
+ex. 6 Odd numbers
+
+1.upto(99) {|i| puts i if i.odd?}
+
+ex. 7 Even numbers
+
+1.upto(99) {|i| puts i if i.even?}
+
+ex. 8 Sum or Product of Consecutive Integers
+
+def greeting(msg)
+  puts ">> #{msg}"
+end
+
+def arrayed_number(num)
+  (1..num).to_a
+end
+
+number = 0
+
+loop do
+  greeting "Enter an Integer greater than 0:"
+
+  number = gets.chomp.to_i
+  break if number > 0
+  greeting "That's is not a valid entry!"
+end
+
+procedure = ''
+
+loop do
+  greeting "Enter 's' to compute the sum."
+  greeting "Enter 'p' to compute the product."
+
+  procedure = gets.chomp.downcase
+
+  break if procedure == 's' || procedure == 'p'
+  greeting "That's is not a valid entry!"
+end
+
+operand = arrayed_number(number)
+
+if procedure == 's'
+  puts "The sum of the integers between 1 and #{number}"
+  puts "is #{operand.inject(:+)}."
+else
+  puts "The product of the integers between 1 and #{number}"
+  puts "is #{operand.inject(:*)}."
+end
+
+ex. 9 String assignment
+
+# The variable name is assigned to the object 'Bob'
+# The variable same_name is assigned to the object 'Bob' via
+# the variable name.
+# name then calls the mutating method #upcase! to change the object 'Bob'
+# to "BOB"
+# Hence both name and same_name both still point to the mutated object they
+# both output the same result.
+
+ex. 10 Mutation
+
+# array2 would output all the element strings that start with a 'C' or an 'S' as all caps.
+# since #upcase! is a mutating method that directly mutates the elements within array1
+# and array2. While array1 and array2 are different objects themselves their respective
+# elements have the same object_ids.
 =end
