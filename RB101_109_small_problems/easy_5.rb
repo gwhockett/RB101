@@ -3,6 +3,7 @@ ex. 1 ASCII string value
 
 def ascii_value(string)
   sum = 0
+  
   string.chars.each do |i|
     sum += i.ord
   end
@@ -34,6 +35,7 @@ ex. 3 After Midnight (Part 2)
 
 def after_midnight(time)
   minutes = []
+
   time.split(':').each do |i|
     minutes << i.to_i
   end
@@ -48,6 +50,7 @@ end
 
 def before_midnight(time)
   minutes = []
+
   time.split(':').each do |i|
     minutes << i.to_i
   end
@@ -70,6 +73,7 @@ ex.4 Letter Swap
 def swap(string)
   words = string.split(' ')
   swapped_words = []
+
   words.map do |letters|
     a = letters[0]
     b = letters[-1]
@@ -85,6 +89,7 @@ ex. 5 Clean up the words
 
 def cleanup(string)
   a = string.gsub(/[^a-z]/, ' ')
+
   a.gsub(/[^a-z]{2,}/, ' ')
 end
 
@@ -96,6 +101,7 @@ def word_sizes(string)
   words_sized = {}
   words_sized.default = 0
   words = string.split(' ')
+
   words.each do |ele|
       words_sized[ele.size] += 1
   end
@@ -113,6 +119,7 @@ def word_sizes(string)
   words_sized = {}
   words_sized.default = 0
   words = string.split(' ')
+
   words.each do |ele|
       words_sized[ele.gsub(/[^a-z]/i, '').size] += 1
   end
@@ -131,6 +138,7 @@ numbers = %w(zero one two three four five six seven eight nine ten
           eighteen nineteen)
 num_hash = {}
 index = 0
+
 numbers.each do |ele|
   num_hash[index] = ele
   index += 1
@@ -141,6 +149,7 @@ NUM_ALPHA = num_hash.invert
 
 def alphabetic_number_sort(ary)
   numbers = []
+
   ary.each do |ele|
     numbers << ALPHA_NUM[ele]
   end
@@ -156,6 +165,7 @@ ex. 9 ddaaiillyy ddoouubbllee
 def crunch(string)
   ary = string.split('')
   ary_1 = []
+
   ary.each do |ele|
     if ele != ary_1.last
       ary_1 << ele
@@ -176,6 +186,7 @@ def print_in_box(string)
   a = ''
   b = ''
   c = string
+
   string.size.times do |ele|
     a << '-'
     b << ' '
