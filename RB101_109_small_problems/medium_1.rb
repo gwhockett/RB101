@@ -185,26 +185,35 @@ minilang('6 PUSH')
 
 ex. 7 Word to Digit
 
+NUMBERS = { 'zero' => '0',
+            'one' => '1',
+            'two' => '2',
+            'three' => '3',
+            'four' => '4',
+            'five' => '5',
+            'six' => '6',
+            'seven' => '7',
+            'eight' => '8',
+            'nine' => '9' }
+
 def word_to_digit!(str) # mutating
-    str.gsub!('zero', '0'); str.gsub!('one', '1'); str.gsub!('two', '2')
-    str.gsub!('three', '3'); str.gsub!('four', '4'); str.gsub!('five', '5')
-    str.gsub!('six', '6'); str.gsub!('seven', '7'); str.gsub!('eight', '8')
-    str.gsub!('nine', '9')
-    str.object_id
+  NUMBERS.each do |key, value|
+    str.gsub!(key, value)
+  end
+  str
 end
 
 def word_to_digit(str) # non mutating
   str.split.each do |word|
-    word.gsub!('zero', '0'); word.gsub!('one', '1'); word.gsub!('two', '2')
-    word.gsub!('three', '3'); word.gsub!('four', '4'); word.gsub!('five', '5')
-    word.gsub!('six', '6'); word.gsub!('seven', '7'); word.gsub!('eight', '8')
-    word.gsub!('nine', '9')
-  end.join(' ').object_id
+    NUMBERS.each do |key, value|
+      word.gsub!(key, value)
+    end
+  end.join(' ')
 end
 a = 'Please call me at five five five one two three four. Thanks.'
-puts a.object_id
-p word_to_digit!(a) #== 'Please call me at 5 5 5 1 2 3 4. Thanks.'
-p word_to_digit(a) #== 'Please call me at 5 5 5 1 2 3 4. Thanks.'
+p a.object_id
+p word_to_digit!(a).object_id #== 'Please call me at 5 5 5 1 2 3 4. Thanks.'
+p word_to_digit(a).object_id
 
 ex. 8 Fibonacci Numbers (Recursion)
 
