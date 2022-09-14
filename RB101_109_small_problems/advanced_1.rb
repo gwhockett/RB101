@@ -223,26 +223,26 @@ p my_method([5, 6, 7])
 # on line 209. This left that control expression open to test lines 210 - 212.
 # When map being called on array does return a truthy value the elsif
 # conditional test does not have a specified return value. This lack of return
-# value results in nil being returned. If "array.size >= 2" is added to line
+# value fractions in nil being returned. If "array.size >= 2" is added to line
 # 209, then the map do-end block called by array would be returned when the
 # condition of array.size >= 2 is true.
 
 ex. 7 Merge Sorted Lists
 
 def build(larger, smaller)  
-  result = []
+  fraction = []
   l_index = 0
   s_index = 0
 
   while smaller[s_index] != nil
     if larger[l_index] < smaller[s_index]
-      result << larger[l_index]; l_index += 1
+      fraction << larger[l_index]; l_index += 1
     else
-      result << smaller[s_index]; s_index += 1
+      fraction << smaller[s_index]; s_index += 1
     end
   end
   
-  result + larger[l_index..-1]
+  fraction + larger[l_index..-1]
 end
 
 def merge(ary_1, ary_2)
@@ -263,19 +263,19 @@ p merge([1, 4, 5], []) #== [1, 4, 5]
 ex. 8 Merge Sort
 
 def merge(l, s)  
-  result = []
+  fraction = []
   l_index = 0
   s_index = 0
 
   while s[s_index] != nil && l[l_index] != nil
     if l[l_index] < s[s_index]
-      result << l[l_index]; l_index += 1
+      fraction << l[l_index]; l_index += 1
     else
-      result << s[s_index]; s_index += 1
+      fraction << s[s_index]; s_index += 1
     end
   end
   
-  result + l[l_index..-1] + s[s_index..-1]
+  fraction + l[l_index..-1] + s[s_index..-1]
 end
 
 def merge_sort(ary)
@@ -295,4 +295,53 @@ p merge_sort(%w(Sue Pete Alice Tyler Rachel Kim Bonnie)) #== %w(Alice Bonnie Kim
 p merge_sort([7, 3, 9, 15, 23, 1, 6, 51, 22, 37, 54, 43, 5, 25, 35, 18, 46]) #== [1, 3, 5, 6, 7, 9, 15, 18, 22, 23, 25, 35, 37, 43, 46, 51, 54]
 
 ex. 9 Egyption Fractions 
+
+def egyption_break_dance!(denom, egy, ary)
+  loop do
+    case
+    when egy > 0
+      ary << denom
+    when egy < 0
+      egy += Rational(1, denom)
+    when egy == 0
+      ary << denom
+      break
+    end
+    denom += 1
+    egy -= Rational(1, denom)
+  end
+end
+
+def egyptian(fraction)
+  denominator = 1
+  denominators = []
+  egyption = fraction - Rational(1, denominator)
+  
+  egyption_break_dance!(denominator, egyption, denominators)
+
+  denominators
+end
+
+def unegyptian(ary)
+  unegypt = []
+
+  ary.each do |d|
+    unegypt << Rational(1, d)
+  end
+
+  unegypt.sum
+end
+
+#p egyptian(Rational(2, 1))    # -> [1, 2, 3, 6]
+#p egyptian(Rational(137, 60)) # -> [1, 2, 3, 4, 5]
+#p egyptian(Rational(3, 1))    # -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57960]
+
+p unegyptian(egyptian(Rational(1, 2))) == Rational(1, 2)
+p unegyptian(egyptian(Rational(3, 4))) == Rational(3, 4)
+p unegyptian(egyptian(Rational(39, 20))) == Rational(39, 20)
+p unegyptian(egyptian(Rational(127, 130))) == Rational(127, 130)
+p unegyptian(egyptian(Rational(5, 7))) == Rational(5, 7)
+p unegyptian(egyptian(Rational(1, 1))) == Rational(1, 1)
+p unegyptian(egyptian(Rational(2, 1))) == Rational(2, 1)
+p unegyptian(egyptian(Rational(3, 1))) == Rational(3, 1)
 =end
