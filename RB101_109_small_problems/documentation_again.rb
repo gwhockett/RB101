@@ -44,23 +44,40 @@ beats me
 # puts a.fetch(7) { |index| index**2 }
 49
 
+A default value is needed to be returned when the search index value is out of
+range of the calling array, i.e. Array#fetch will not return #nil like Array#[]
+does when the index is out of range.
+
 ex. 6
 
 5.step(to: 10, by: 3) { |value| puts value }
 
-# => 5
-# => 8
+# -> 5
+# -> 8
 
 # 5 is output as the first step. 8 is the next step. 10 is the limit but is not
 # output because it is smaller than the defined step of 3 from 8.
+Pay attention to the documentation. Here the block executes outputs 5 then 8.
+The whole method invocation returns self (5).
 
 ex. 7
+How would you modify this code to print just the public methods that are
+defined or overridden by the String class? That is, the list should exclude all
+members that are only defined in Object, BasicObject, and Kernel.
 
 s = 'abc'
 puts s.public_methods(false).inspect
 
-# In ruby documentation - String - Parent is Object - instance method public_methods
+The default argument for this method is set to true all methods if it is
+omitted or set to true. 
 
+#If you look at the #String documentation, you won't find any mention of
+#public_methods. Ruby is an object oriented language. Every value in Ruby is
+an object, which means that it has an associated class, and that class in turn
+has a superclass, or parnet. Every class that indherits from a superclass also
+inherits from a super class also inherits all of its methods.
+
+Check the Parent Box to get to the Object class methods.
 ex.8
 
 a = [5, 9, 3, 11]
