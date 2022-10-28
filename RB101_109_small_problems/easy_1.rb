@@ -11,7 +11,7 @@ repeat('Hello', 3)
 ex. 2 odd
 
 def is_odd?(num)
-  num % 2 != 0
+  num.remainder(2).abs == 1
 end
 
 puts is_odd?(2)    # => false
@@ -21,6 +21,7 @@ puts is_odd?(-8)   # => false
 puts is_odd?(0)    # => false
 puts is_odd?(7)    # => true
 
+=end
 ex. 3 List of Digits
 
 def digit_list(num)
@@ -34,7 +35,7 @@ puts digit_list(12345) == [1, 2, 3, 4, 5]     # => true
 puts digit_list(7) == [7]                     # => true
 puts digit_list(375290) == [3, 7, 5, 2, 9, 0] # => true
 puts digit_list(444) == [4, 4, 4]             # => true
-
+=begin
 ex. 4 How many?
 
 vehicles = [
