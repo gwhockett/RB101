@@ -799,46 +799,71 @@ and the string literal "hello world" is passed in as an argument.
 When #a_method is invoked the string "hello world" will be output and return
 nil.
 
-Pass by Value and Pass by Reference
+Method Definition and Method Invocation
+
+A named method can be defined in Ruby using the key word pair #def..end. The
+name of the method immediately follows the key word #def. The constuction of the
+method can also have parameters that will be arguments passed into the method
+at invocation of the method. These parameters are set when they follow the name
+of the method at definition.
+e.g.,
+
+def method_1 (parameter_1, parameter_2)
+  expressions
+end
+
+To invoke this method we would reference its name along with two objects to be
+passed in as arguments. We could also invoke a method along with a block. To do
+this we would use #{..} or the key word pair #do..end.
+
+Method definition sets how method invocation creates inner scope for the use of
+local variables through the parameters of the method. A block's return value use
+at a method's inner scope is also determined at that method's definition.
 
 What is object passing?
-Objects are data stored at a unique physical memory address in the computer.
-All most everything in Ruby is an object, so a method's argument can be a
-local variable, another method, a string literal, etc. Ruby methods use or
-manipulate these differing data types. When calling a method with an expression
-as an argument, the expression is evaulated and reduced to an object. That
-object is then made available to the inner scope of the method. This is called
-passing the object to the method or object passing. Objects can call methods as
-well. A calling object can be though of as an implied argument.
 
-Broadly, the manner in which software languages pass around objects typically
-can fall into two different silos, pass by reference or pass by value and is
+When a method with an argument is invoked, the argument is evaulated and
+reduced to an object. An object is data stored at a unique physical memory
+address in the computer. All most everything in Ruby is an object, so a
+method's argument can be a local variable that points to an object, another
+method, a string literal, etc. That object is then made available to the inner
+scope of the method. This is called passing the object to the method or object
+passing. Objects can call methods as well and a calling object can be though of
+as an implied argument.
+
+Broadly, the manner in which a software language passes objects typically can
+fall into two different silos, pass-by-reference or pass-by-value. This is
 determined by the evaluation stategey of the coding language in use.
 
-Pass-by-reference evaluation uses a pointing object (a hidden or seen variable)
-that points the method to an object which results in a direct use of or
-destructive manipulation of the data at that physical memory location. The
-referenced data has a path to the object created.
+Pass-by-reference evaluation uses a pointer (a hidden or seen variable) that
+points the method to the argument's object. The variable's bound reference is
+the path by which the method's argument is reduced to an object. This reference
+results in a direct use of and/or mutative manipulation of that data's physical
+memory location. 
 
-However, pass-by-value evaluation creates a copy of the data value of the
-argument at a different physical location, i.e. a different object, that the
-method then works with. In a strict pass-by-value language, this use of a
-copied object makes it impossible to change the value of the original calling
-object or passed in object.
+However, pass-by-value evaluation creates a copy of the data's value of the
+argument at a different physical location, i.e. a different object. The method
+then works with the data at the new physical memory address. In a strict
+pass-by-value language, this use of a copied object makes it impossible to
+change the value of the original calling object or passed in argument.
 
-Pass-By-Value-Of-The-Reference, in other words, Pass-By-Reference-Value
+Pass-By-Reference-Value (Pass-By-Value-Of-The-Reference)
 
 So, what is the value of a reference? When we initialize two local variables
 that point to the same object, it can be said that the value of each connection
-are the same though the variables have different names. If we reassign one of
-our variables to a different object that has the same value as the original
-physical memory location (object), then the value of the pointing references
-are now different. Our two local variables' reverence values have changed even
-though the value of the objects that the references point to are the same.
+established is the same though the variables have different names. This is
+because the differing variables reduce to the same physical memory address. If
+we reassign one of our variables to a different object that has the same data
+value as the original object, then the value of the pointing reference of our
+reassigned variable is now different even though the value of the objects that
+both variables point to are the same. In essence, pass-by-reference-value is an
+evaluation strategy of a method's reductive relationship between an argument
+(or caller) and a physical memory address. 
 
-When an argument has been passed into a method and a variable was bound to the
-object of the argument, the value of the original REFERENCE can not be changed
-at the inner scope of the method. Though the value of the object itself can be
-changed at the inner scope, if it is a mutable object.
+Further, when an argument has been passed into a method and a variable is bound
+to the object of the argument, the value of the original REFERENCE can not be
+changed at the inner scope of the method. Thus the immutable value of the
+reference and the mutative capacity of the inner scope of a method if the
+object passed in is a mutable object.
 
 =end
