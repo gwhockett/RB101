@@ -1,0 +1,18 @@
+
+[1mFrom:[0m /home/george/RB101/practice.rb:938 Object#staggered_case:
+
+    [1;34m934[0m: [32mdef[0m [1;34mstaggered_case[0m(str)
+    [1;34m935[0m:   staggered = str.chars
+    [1;34m936[0m: 
+    [1;34m937[0m:   binding.pry
+ => [1;34m938[0m:   staggered.map [32mdo[0m |ele|
+    [1;34m939[0m:     [32mif[0m staggered.index(ele).even? && ele.match?([35m[1;35m/[0m[35m[a-zA-Z][1;35m/[0m[35m[0m)
+    [1;34m940[0m:       ele.upcase
+    [1;34m941[0m:     [32melsif[0m staggered.index(ele).odd? && ele.match?([35m[1;35m/[0m[35m[a-zA-Z][1;35m/[0m[35m[0m)
+    [1;34m942[0m:       ele.downcase
+    [1;34m943[0m:     [32melse[0m
+    [1;34m944[0m:       ele
+    [1;34m945[0m:     [32mend[0m
+    [1;34m946[0m:   [32mend[0m
+    [1;34m947[0m: [32mend[0m
+

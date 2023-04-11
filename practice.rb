@@ -142,7 +142,8 @@ p ages.select {|key, value| value < 100}
 
 # 4
 
-ages = { 'Herman' => 32, 'Lily' => 30, 'Grandpa' => 5843, 'Eddie' => 10, 'Marilyn' => 22, 'Spot' => 237 }
+ages = { 'Herman' => 32, 'Lily' => 30, 'Grandpa' => 5843, 'Eddie' => 10,
+         'Marilyn' => 22, 'Spot' => 237 }
 
 min = ages.values[0]
 
@@ -250,7 +251,8 @@ counter2 = 0
 loop do
   break if counter2 == statement_arr.size
 
-  counts = [statement_arr[counter2], statement_arr.count(statement_arr[counter2])]
+  counts = [statement_arr[counter2],
+            statement_arr.count(statement_arr[counter2])]
   statement_arr_counts << counts
   statement_arr_counts.uniq!
 
@@ -352,7 +354,8 @@ p arr.sort {|a,b| b.to_i <=> a.to_i}
 # 2
 
 books = [
-  {title: 'One Hundred Years of Solitude', author: 'Gabriel Garcia Marquez', published: '1967'},
+  {title: 'One Hundred Years of Solitude', author: 'Gabriel Garcia Marquez',
+          published: '1967'},
   {title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', published: '1925'},
   {title: 'War and Peace', author: 'Leo Tolstoy', published: '1869'},
   {title: 'Ulysses', author: 'James Joyce', published: '1922'}
@@ -368,7 +371,8 @@ arr1 = ['a', 'b', ['c', ['d', 'e', 'f', 'g']]]
 
 p arr1[2][1][3]
 
-arr2 = [{first: ['a', 'b', 'c'], second: ['d', 'e', 'f']}, {third: ['g', 'h', 'i']}]
+arr2 = [{first: ['a', 'b', 'c'], second: ['d', 'e', 'f']},
+        {third: ['g', 'h', 'i']}]
 
 p arr2[1][:third][0]
 
@@ -449,7 +453,8 @@ b #=> [3,8]
 
 # 8
 
-hsh = {first: ['the', 'quick'], second: ['brown', 'fox'], third: ['jumped'], fourth: ['over', 'the', 'lazy', 'dog']}
+hsh = {first: ['the', 'quick'], second: ['brown', 'fox'], third: ['jumped'],
+       fourth: ['over', 'the', 'lazy', 'dog']}
 
 hsh.each do |key, value|
   value.each do |string|
@@ -493,7 +498,8 @@ end)
 # 12
 
 arr = [[:a, 1], ['b', 'two'], ['sea', {c: 3}], [{a: 1, b: 2, c: 3, d: 4}, 'D']]
-# expected return value: {:a=>1, "b"=>"two", "sea"=>{:c=>3}, {:a=>1, :b=>2, :c=>3, :d=>4}=>"D"}
+# expected return value: {:a=>1, "b"=>"two", "sea"=>{:c=>3},
+#                        {:a=>1, :b=>2, :c=>3, :d=>4}=>"D"}
 
 hsh = {}
 
@@ -653,7 +659,8 @@ end
 
 # all_orders =[
   # {customer_id: 12, customer_name: 'Emma Lopez', total_order_value: 483.48},
-  # {customer_id: 32, customer_name: 'Michael Richards', total_order_value: 205.65},
+  # {customer_id: 32, customer_name: 'Michael Richards',
+  #  total_order_value: 205.65},
   # # rest of data
 # ]
 
@@ -733,19 +740,20 @@ words_size = words.split.join.size
 
 puts size_output(words, words_size)
 
-STR_NUM = {'0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9}
+STR_NUM = {'0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4,
+           '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9}
 
 def string_to_integer(string)
   num = 0
   exponent = string.size - 1
-  num_string = string.split('')
+  ord_string = string.split('')
   loop do
     STR_NUM.each do |k,v|
-      num += (10 ** exponent) * v if k == num_string.first
+      num += (10 ** exponent) * v if k == ord_string.first
     end
     exponent -= 1
-    num_string.shift
-    break if num_string[0] == nil
+    ord_string.shift
+    break if ord_string[0] == nil
   end
   num *= -1 if string[0] == '-'
   num
@@ -778,8 +786,8 @@ return value is used by Array#map on line 1 to return a new outer array on line
 on each index of the outer array. Lines 2 - 4 execute a block and its return
 value is used by Array#map on line 2 to return a new array to the outer block.
 On line 3 the block variable #letter initialized on line 2 calls the
-String#upcase method returns a modified string value to the inner block execution
-on lines 2 - 4.
+String#upcase method returns a modified string value to the inner block
+execution on lines 2 - 4.
 
 #
 On line 1 we initiate the local variable #greeting that points to string object
@@ -798,6 +806,34 @@ and the string literal "hello world" is passed in as an argument.
 
 When #a_method is invoked the string "hello world" will be output and return
 nil.
+
+Variable References and Mutability
+
+What is an object? For Ruby an object is data with a specific physical memory
+local that contains a value, state or behavior. The value can be information,
+such as a string of characters that could make up words or everyday language.
+Or it could be one of the dichotomous class of boolean objects true or false.
+Objects can be accessed through the assignment of a variable, where the
+variable is bound to the memory address of the object. The variable references
+the object by storing its object id. This storage of the object id is what
+binds the variable to its reference object. Here multiple variables can
+reference the same object because they store the same object id. A key point to
+remember is that different objects and can have the same value. So two
+variables might point to two different string objects that have the same value
+such as "hello" and have two different object ids. [How is object identity
+determined? Is it what specific location an object has within a group type?]
+
+Mutatbility in Ruby
+
+Some object values can be changed and some cannot be changed. Objects whose
+value cannot be changed are immutable. Integers and booleans are some immutable
+objects and variables can only be assigned or reassigned to them.
+Most objects in Ruby are mutable. A mutable object is one where its value
+can change but that object's id is the same after the changed in value. For
+example a string object's value might change from "hello" to "good-bye" and keep
+the same object id. When the variable that is assigned to that string object is
+invoked it will still use the same object id as the original value "hello" but
+is now changed to "good-bye".
 
 Method Definition and Method Invocation
 
@@ -820,6 +856,8 @@ Method definition sets how method invocation creates inner scope for the use of
 local variables through the parameters of the method. A block's return value use
 at a method's inner scope is also determined at that method's definition.
 
+Mutating and Non Mutating Methods
+
 What is object passing?
 
 When a method with an argument is invoked, the argument is evaulated and
@@ -839,7 +877,7 @@ Pass-by-reference evaluation uses a pointer (a hidden or seen variable) that
 points the method to the argument's object. The variable's bound reference is
 the path by which the method's argument is reduced to an object. This reference
 results in a direct use of and/or mutative manipulation of that data's physical
-memory location. 
+memory location.
 
 However, pass-by-value evaluation creates a copy of the data's value of the
 argument at a different physical location, i.e. a different object. The method
@@ -858,7 +896,7 @@ value as the original object, then the value of the pointing reference of our
 reassigned variable is now different even though the value of the objects that
 both variables point to are the same. In essence, pass-by-reference-value is an
 evaluation strategy of a method's reductive relationship between an argument
-(or caller) and a physical memory address. 
+(or caller) and a physical memory address.
 
 Further, when an argument has been passed into a method and a variable is bound
 to the object of the argument, the value of the original REFERENCE can not be
@@ -866,4 +904,71 @@ changed at the inner scope of the method. Thus the immutable value of the
 reference and the mutative capacity of the inner scope of a method if the
 object passed in is a mutable object.
 
+Truthiness
+
+Launch School's PEDAC
+
+PEDAC stands for "[understand the] Problem, [what are the] Examples and test
+cases, Determine Data structure,[implement an] Algorithm, Code.
+
+Step 1.
+Process and understand the problem. Identify expected input and output. Make
+the requirments explicit. Identify rules and possibly derive a mental model.
+
+Step 2.
+Validate understanding of the problem with examples and test cases.
+
+Step 3.
+Determine a data structure that we can work with for converting the input and
+output.
+
+Step 4.
+The logical steps for conveting input to output is the algorithm.
+
+Step 5.
+Code with intent using the previous four steps to implement the algorithm.
+
+On line 1 we initialize variable a and assign it to 7. On lines 3 through 5 the
+method my_value is defined to take a single parameter b. my_value returns the
+result of assigning a new variable a (that is local to the my_value method
+scope) to the value of parameter b. line 7 calls method my_value that with an
+argument that is the sum of outer local variable a's currently assigned value
+of 7 and 5. my_value on line 7 is the integer 12. Line 8 calls the puts method
+with outer local variable a passed in as an argument. Here 7 is output and nil
+is returned.
+
+7 is output. The puts method only has access to the variable a that is at the
+outer scope of the method my_value even though local variable a is passed in
+as an argument. The reassignment of a in my_value does not affect a at the
+outer scope.
+
+numbers = ['2', '3', '5', '7', '8', '11', '13', '15', '18']
+odd_numbers = []
+counter = 0
+
+loop do
+  number = numbers[counter].to_i
+
+  odd_numbers << numbers[counter] unless number.even?
+
+  counter += 1
+  break if counter == numbers.size
+end
+
+
+```ruby
+arr.each do |element|
+  puts element.foo
+end
+```
+
+This paragraph talks about the `each` method called by an array that is
+referenced by the variable `arr`. A block is then invoked on every `arr` element
+using the parameter name `element` to refernce and pass each `arr` element to
+the block as an argument. Within the block, the `puts` method is used with
+`element.foo` passed in as an argument to print out `element.foo` and return
+`nil`.
+
 =end
+state_info = {"Massachusetts" => 78, "Idaho" => 72, "Georgia" => 41, "Indiana" => 45}
+p state_info.sort_by { |i| i[1] }
