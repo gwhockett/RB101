@@ -16,17 +16,17 @@ range is above the last index.**
 [Independent Iterator, Dependent Iterator]
 [     Start Index    ,       Length      ]
 
-[0, 1] [0, 2] [0, 3] [0, 4] [0, 5] -> First index start with increasing element lengths.
-[1, 1] [1, 2] [1, 3] [1, 4] [1, 5] -> Second index start with increasing element lengths.
-[2, 1] [2, 2] [2, 3] [2, 4] [2, 5] -> Third index start with increasing element lengths.
+[0, 1] [0, 2] [0, 3] [0, 4] -> First index start with an increasing length.
+[1, 1] [1, 2] [1, 3] [1, 4] -> Second index start with an increasing length.
+[2, 1] [2, 2] [2, 3] [2, 4] -> Third index start with an increasing length.
 ...etc...
 
 [Independent Iterator..Dependent Iterator]
-[      Lower Range   ..   Upper Range    ]
+[      Lower Index   ..   Upper Index    ]
 
-[0..0] [0..1] [0..2] [0..3] [0..4] -> First index start at an increasing range.
-[1..1] [1..2] [1..3] [1..4] [1..5] -> Second index start at an increasing range.
-[2..2] [2..3] [2..4] [2..5] [2..6] -> Third index start at an increasing range.
+[0..0] [0..1] [0..2] [0..3] -> First index start at an increasing range.
+[1..1] [1..2] [1..3] [1..4] -> Second index start at an increasing range.
+[2..2] [2..3] [2..4] [2..5] -> Third index start at an increasing range.
 ...etc...
 
 =end
@@ -79,7 +79,7 @@ end
 [0, 3] [1, 3] [2, 3] [3, 3] [4, 3] -> Three element length at an increasing start index.
 
 [Dependent Iterator.. Independent Iterator]
-[    Lower Range   ..      Upper Range    ]
+[    Lower Index   ..      Upper Index    ]
 
 [0..0] [1..1] [2..2] [3..3] [4..4] -> One element range at an increasing index.
 [0..1] [1..2] [2..3] [3..4] [4..5] -> Two element range at an increasing index.
@@ -305,4 +305,4 @@ p longest_palindrome("baa") == 2
 p longest_palindrome("aab") == 2
 p longest_palindrome("baabcd") == 4
 p longest_palindrome("baablkj12345432133d") == 9
-
+=end
