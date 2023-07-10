@@ -71,19 +71,21 @@ end
 #indpt_itr_lower_range("abcdefghij")
 
 =begin
-[Dependent Iterator, Independent Iterator]
-[   Start Index    ,        Length       ]
-
-[0, 1] [1, 1] [2, 1] [3, 1] [4, 1] -> One element length at an increasing start index.
-[0, 2] [1, 2] [2, 2] [3, 2] [4, 2] -> Two element length at an increasing start index.
-[0, 3] [1, 3] [2, 3] [3, 3] [4, 3] -> Three element length at an increasing start index.
-
 [Dependent Iterator.. Independent Iterator]
 [    Lower Index   ..      Upper Index    ]
 
-[0..0] [1..1] [2..2] [3..3] [4..4] -> One element range at an increasing index.
-[0..1] [1..2] [2..3] [3..4] [4..5] -> Two element range at an increasing index.
-[0..2] [1..3] [2..4] [3..5] [4..6] -> Three element range at an increasing index.
+[0..0] [1..1] [2..2] [3..3] -> One element range at an increasing index.
+[0..1] [1..2] [2..3] [3..4] -> Two element range at an increasing index.
+[0..2] [1..3] [2..4] [3..5] -> Three element range at an increasing index.
+...etc...
+
+[Dependent Iterator, Independent Iterator]
+[   Start Index    ,        Length       ]
+
+[0, 1] [1, 1] [2, 1] [3, 1] -> One element length at an increasing start index.
+[0, 2] [1, 2] [2, 2] [3, 2] -> Two element length at an increasing start index.
+[0, 3] [1, 3] [2, 3] [3, 3] -> Three element length at an increasing start index.
+...etc...
 =end
 
 def indpt_itr_length(pasd_obj, indpt_step = 1, dpt_step = 1)
